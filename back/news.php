@@ -17,7 +17,7 @@
             foreach ($rows as $idx => $row) {
             ?>
                 <tr>
-                    <td><?= $start+$idx + 1; ?>.</td>
+                    <td class="clo"><?= $start+$idx + 1; ?>.</td>
                     <td><?= $row['title']; ?></td>
                     <td><input type="checkbox" name="sh[]" value="<?= $row['id']; ?>" <?= ($row['sh'] == 1) ? 'checked' : ''; ?>></td>
                     <td>
