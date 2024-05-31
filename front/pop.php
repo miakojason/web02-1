@@ -1,10 +1,24 @@
+<style>
+    .pop {
+        background: rgba(51, 51, 51, 0.8);
+        color: #FFF;
+        min-height: 100px;
+        width: 300px;
+        height: 300px;
+        position: fixed;
+        display: none;
+        z-index: 9999;
+        overflow: auto;
+        margin-top: -30px;
+    }
+</style>
 <fieldset>
-    <legend>目前位置:首頁>最新文章區</legend>
+    <legend>目前位置:首頁>人氣文章區</legend>
     <table>
         <tr>
             <th>標題</th>
             <th>內容</th>
-            <th></th>
+            <th>人氣</th>
         </tr>
         <?php
         $total = $News->count(['sh' => 1]);
@@ -12,16 +26,17 @@
         $pages = ceil($total / $div);
         $now = $_GET['p'] ?? 1;
         $start = ($now - 1) * $div;
-        $rows = $News->all(['sh' => 1], " limit $start,$div");
+        $rows = $News->all(['sh' => 1], " order by `good` desc limit $start,$div");
         foreach ($rows as $row) {
         ?>
             <tr>
                 <td width="30%" class="clo list" data-id="<?= $row['id']; ?>"><?= $row['title']; ?></td>
                 <td>
                     <div class="s<?= $row['id']; ?>"><?= mb_substr($row['text'], 0, 20); ?>....</div>
-                    <pre class="a<?= $row['id']; ?>" style="display: none;"><?= $row['text']; ?></pre>
+                    <pre class="pop" id="a<?= $row['id']; ?>" style="display: none;"><h3 style="color:aqua;"><?=$row['title'];?></h3><?= $row['text']; ?></pre>
                 </td>
                 <td>
+                  <span><?=$row['good'];?>幾個人說</span><img src="./icon/02B03.jpg" style="width:30px;">
                     <?php
                     if (isset($_SESSION['user'])) {
                         if ($Log->count(['acc' => $_SESSION['user'], 'news' => $row['id']]) > 0) {
@@ -60,15 +75,17 @@
     </div>
 </fieldset>
 <script>
-    $(".list").on("click", function() {
+    $(".list").hover(function() {
         let id = $(this).data('id');
-        $(".s" + id).toggle()
-        $(".a" + id).toggle()
+        $(".pop").hide()
+        $("#a" + id).show()
     })
 
 
-    function good(news){
-        $.post("./api/good.php",{news},()=>{
+    function good(news) {
+        $.post("./api/good.php", {
+            news
+        }, () => {
             location.reload();
         })
     }
