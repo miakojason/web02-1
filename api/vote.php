@@ -7,4 +7,4 @@ $Que->save($opt);
 $row=$Que->find(['id'=>$opt['subject_id']]);
 $row['vote']++;
 $Que->save($row);
-to("../index.php?do=reault&id={$row['id']}");
+to("../index.php?do=result&id={$row['id']}");
