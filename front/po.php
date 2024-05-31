@@ -44,12 +44,15 @@
             $(".list-items").show();
         })
     }
-    function getnews(id){
-$.get("./api/get_news.php",{id},(news)=>{
-    $(".article").html(news)
-    $(".article").show();
-    $(".list-items").hide();
 
-})
+    function getnews(id) {
+        $.get("./api/get_news.php", {
+            id
+        }, (news) => {
+            $(".article").html(news)
+            $(".article").show();
+            $(".list-items").hide();
+
+        })
     }
 </script>
